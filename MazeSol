@@ -1,0 +1,101 @@
+
+#include "simpletools.h"                      // incluir simpletools para controladores de la placa
+#include "abdrive.h"                          // Inckuir abdrive para encoders y servos
+#include "ping.h"                             // Incluir ping para sensor
+
+
+#define STACK_MAX 10              //tamano del stack
+struct Stack {
+    int     data[STACK_MAX];
+    int     size;
+};
+typedef struct Stack STACK;
+STACK pila;
+void push(int);
+int  pop(void);
+
+
+int distancia;
+int derecha;
+int izquierda;
+int distLeft[1];
+int distRight[1];
+
+int main()                                    
+{
+  distancia=ping_cm(8);
+  pause(100);
+  pila.size = -1;
+  while (1)   {
+    distancia=ping_cm(8);
+    pause(50);
+    freqout(10, 1, 4000);
+    izquierda=input(11);            //lee el receptor del infrarojo, 1 si no recibe luz y 0 si recibe
+    pause(50);             
+    freqout(0, 1, 4000);
+    derecha=input(1);
+    pause(50);             
+//el robot camina recto
+    if (distancia<=10){
+      int valor=pop();
+      if(valor==1){
+        drive_getTicks(&distLeft[1], &distRight[1]);
+        int dis1=distLeft[1]-distLeft[0];
+        int dis2=distRight[1]-distRight[0];
+        drive_goto(-dis1, -dis2);          //camina hacia atras
+        pause(200);
+        drive_goto(26, -25);    //da un giro de 90 grados
+        pause(200);
+        drive_goto(50, 50);          //camina hacia adelante
+      }
+      if(valor==2){
+        drive_getTicks(&distLeft[1], &distRight[1]);
+        int dis1=distLeft[1]-distLeft[0];
+        int dis2=distRight[1]-distRight[0];
+        drive_goto(-dis1, -dis2);          //camina hacia atras
+        pause(200);
+        drive_goto(-25, 26);    //da un giro de 90 grados
+        pause(200);
+        drive_goto(50, 50);          //camina hacia adelante
+      }     
+    }      
+    if ((izquierda==0) && (derecha==0)){
+      drive_speed(25,25);              //permite ir a una velocidad especifica (max 128)
+      pause(50);
+    }      
+//si no hay obstaculo a la derecha, guarda un valor en el stack
+    else if ((izquierda==0) && (derecha==1)){
+      drive_speed(0,0);           //detiene el robot
+      pause(200);
+      drive_getTicks(&distLeft[0], &distRight[0]);    //cuenta el numero de ticks(distancia)
+      pause(200);
+      push(1);
+      pause(200);
+      drive_goto(80, 80);
+      //drive_goto(26, -25);        //da un giro de 90 grados
+      //pause(200);
+      //drive_goto(80, 80);    
+      //pause(200);
+      //push(1);
+    }
+//si no hay obstaculo a la izquierda, guarda un valor en el stack
+    else if ((izquierda==1) && (derecha==0)){
+      drive_speed(0,0);           //detiene el robot
+      pause(200);
+      drive_getTicks(&distLeft[0], &distRight[0]);    //cuenta el numero de ticks(distancia)
+      pause(200);
+      push(2);
+      pause(200);
+      drive_goto(80, 80);
+      //drive_goto(-25, 26);       //da un giro de 90 grados
+      //pause(200);
+      //drive_goto(80, 80);    
+      //pause(200);
+    }
+//el robot se detiene si no hay obstaculos
+    else if ((izquierda==1) && (derecha==1)){
+      drive_speed(0,0);          //detiene al robot
+    }
+           
+  }     
+} 
