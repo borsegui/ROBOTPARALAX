@@ -99,3 +99,36 @@ int main()
            
   }     
 } 
+
+
+
+//guarda un valor en el stack
+void push (int num) {
+    if (pila.size == (STACK_MAX - 1)) {
+        printf ("Stack is Full\n");
+        return;
+    }
+    else {
+        //printf ("Enter the element to be pushed\n");
+        //scanf ("%d", &num);
+        pila.size = pila.size + 1;
+        pila.data[pila.size] = num;
+        printf("%d guardado\n",&num);
+    }
+    return;
+}
+
+//regresa un valor del stack
+int pop (){
+    int num;
+    if (pila.size == - 1) {
+        printf ("Stack is Empty\n");
+        return (pila.size);
+    }
+    else {
+        num = pila.data[pila.size];
+        printf ("poped element is = %d\n", num);
+        pila.size = pila.size - 1;
+    }
+    return(num);
+}
