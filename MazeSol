@@ -1,8 +1,7 @@
 
-#include "simpletools.h"                      // incluir simpletools para controladores de la placa
-#include "abdrive.h"                          // Inckuir abdrive para encoders y servos
-#include "ping.h"                             // Incluir ping para sensor
-
+#include "simpletools.h" 
+#include "abdrive.h" 
+#include "ping.h" 
 
 #define STACK_MAX 10              //tamano del stack
 struct Stack {
