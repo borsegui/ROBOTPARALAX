@@ -1,11 +1,3 @@
-//drive_goto(a,a);        //permite ir a una distancia especifica
-//drive_speed(a,a);       //permite ir a una velocidad especifica (max 128)
-//drive_ramp(a,a);        //permite amortiguar la salida y parada (max 128)
-//drive_goto(52, -51);    //da un giro de 180 grados                    
-//drive_goto(26, -25);    //da un giro de 90 grados
-//drive_speed(80, 60);    //permite recorrer una curva                    
-//drive_getTicks(&distLeft[0], &distRight[0]);    //cuenta el numero de ticks(distancia)
-//ping_cm(8)              //lee la distancia que mide el sensor
 
 
 #include "simpletools.h"                      // incluir simpletools para controladores de la placa
